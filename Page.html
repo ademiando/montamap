@@ -56,6 +56,185 @@
       border-radius: 4px;
       border: 1px solid #ccc;
     }
+
+
+  <title>Hamburger Menu</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 0;
+    }
+
+    .menu-container {
+      position: fixed;
+      inset-inline-end: 20px;
+      inset-block-start: 20px;
+      z-index: 1000;
+    }
+
+    #hamburger {
+      font-size: 24px;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    .menu {
+      margin-top: 10px;
+      width: 250px;
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 15px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .menu-item {
+      margin-bottom: 12px;
+      cursor: pointer;
+    }
+
+    .menu-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    select, button {
+      padding: 5px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+
+
+  <title>Hamburger Menu</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 0;
+    }
+
+    .menu-container {
+      position: fixed;
+      inset-inline-end: 20px;
+      inset-block-start: 20px;
+      z-index: 1000;
+    }
+
+    #hamburger {
+      font-size: 24px;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    .menu {
+      margin-top: 10px;
+      width: 250px;
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 15px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .menu-item {
+      margin-bottom: 12px;
+      cursor: pointer;
+    }
+
+    .menu-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    select, button {
+      padding: 5px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+  <div class="menu-container">
+    <button id="hamburger">&#9776;</button>
+
+    <div id="menu" class="menu hidden">
+      <div class="menu-item">⚙️ Settings</div>
+      <div class="menu-item">🔑 Login</div>
+
+      <div class="menu-row">
+        <select id="language">
+          <option>English</option>
+          <option>Bahasa</option>
+          <option>Español</option>
+        </select>
+
+        <select id="currency">
+          <option>USD</option>
+          <option>IDR</option>
+          <option>EUR</option>
+        </select>
+      </div>
+
+      <div class="menu-row">
+        <button id="lightBtn">Light</button>
+        <button id="darkBtn">Dark</button>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+  </style>
+</head>
+<body>
+  <div class="menu-container">
+    <button id="hamburger">&#9776;</button>
+
+    <div id="menu" class="menu hidden">
+      <div class="menu-item">⚙️ Settings</div>
+      <div class="menu-item">🔑 Login</div>
+
+      <div class="menu-row">
+        <select id="language">
+          <option>English</option>
+          <option>Bahasa</option>
+          <option>Español</option>
+        </select>
+
+        <select id="currency">
+          <option>USD</option>
+          <option>IDR</option>
+          <option>EUR</option>
+        </select>
+      </div>
+
+      <div class="menu-row">
+        <button id="lightBtn">Light</button>
+        <button id="darkBtn">Dark</button>
+      </div>
+    </div>
+  </div>
+
+
+
   </style>
 </head>
 <body>
