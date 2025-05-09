@@ -8,12 +8,15 @@
     body {
       font-family: sans-serif;
       background-color: #f5f5f5;
-      margin: 20px;
+      margin: 0;
+      padding: 0;
     }
 
     .menu-container {
-      position: relative;
-      display: inline-block;
+      position: fixed;
+      inset-inline-end: 20px;
+      inset-block-start: 20px;
+      z-index: 1000;
     }
 
     #hamburger {
@@ -24,16 +27,13 @@
     }
 
     .menu {
-      position: absolute;
-      right: 0;
-      top: 40px;
+      margin-top: 10px;
       width: 250px;
       background: white;
       border: 1px solid #ccc;
       border-radius: 8px;
       padding: 15px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      z-index: 10;
     }
 
     .hidden {
