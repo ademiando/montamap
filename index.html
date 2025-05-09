@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hamburger Menu</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="menu-container">
+    <button id="hamburger">&#9776;</button>
+
+    <div id="menu" class="menu hidden">
+      <div class="menu-item">⚙️ Settings</div>
+      <div class="menu-item">🔑 Login</div>
+
+      <div class="menu-row">
+        <select id="language">
+          <option>English</option>
+          <option>Bahasa</option>
+          <option>Español</option>
+        </select>
+
+        <select id="currency">
+          <option>USD</option>
+          <option>IDR</option>
+          <option>EUR</option>
+        </select>
+      </div>
+
+      <div class="menu-row">
+        <button id="lightBtn">Light</button>
+        <button id="darkBtn">Dark</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
