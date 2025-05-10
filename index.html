@@ -1,40 +1,211 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hamburger Menu</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Montamap - Top 10 Mountains</title>
+  <style>
+    :root {
+      --bg-light: url('https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=1950&q=80');
+      --bg-dark: url('https://images.unsplash.com/photo-1499346030926-9a72daac6c63?auto=format&fit=crop&w=1950&q=80');
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      transition: background-image 0.5s ease;
+      color: #111;
+    }
+
+    body.dark {
+      color: #f0f0f0;
+    }
+
+    .toggle-theme-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 10px 16px;
+      font-size: 0.9rem;
+      border: none;
+      border-radius: 8px;
+      background-color: rgba(0,0,0,0.7);
+      color: white;
+      cursor: pointer;
+      z-index: 1000;
+    }
+
+    .mountain-container {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      width: 100%;
+      max-width: 700px;
+    }
+
+    .mountain-card {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: pointer;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.15);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .mountain-card:hover {
+      transform: scale(1.02);
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .mountain-image {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      display: block;
+      transition: filter 0.3s ease;
+    }
+
+    .mountain-card:hover .mountain-image {
+      filter: brightness(0.85);
+    }
+
+    .gradient-overlay {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background: linear-gradient(to left, rgba(0, 0, 0, 0.5), transparent);
+    }
+
+    .mountain-info {
+      position: absolute;
+      bottom: 16px;
+      left: 20px;
+      color: white;
+      z-index: 2;
+    }
+
+    .mountain-name {
+      font-size: 1.6rem;
+      font-weight: bold;
+      margin-bottom: 4px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+    }
+
+    .mountain-details {
+      font-size: 0.95rem;
+      line-height: 1.4;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    }
+
+    .status-open {
+      color: #8cffb3;
+    }
+
+    .status-closed {
+      color: #ff7f7f;
+    }
+
+    #loadMoreBtn {
+      margin-top: 24px;
+      padding: 12px 20px;
+      font-size: 1rem;
+      border-radius: 10px;
+      border: none;
+      background-color: #3742fa;
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    #loadMoreBtn:hover {
+      background-color: #2f35c7;
+    }
+  </style>
 </head>
 <body>
-  <div class="menu-container">
-    <button id="hamburger">&#9776;</button>
+  <button class="toggle-theme-btn" id="themeToggle">Switch to Dark Mode</button>
 
-    <div id="menu" class="menu hidden">
-      <div class="menu-item">⚙️ Settings</div>
-      <div class="menu-item">🔑 Login</div>
+  <div class="mountain-container" id="mountainContainer"></div>
+  <button id="loadMoreBtn">Load More Mountains</button>
 
-      <div class="menu-row">
-        <select id="language">
-          <option>English</option>
-          <option>Bahasa</option>
-          <option>Español</option>
-        </select>
+  <script>
+    const mountainData = [
+      { name: "Everest", region: "Nepal / Tibet", status: "Closed", elevation: "8,848 m", weather: "-35°C Windy", image: "mountain-image/everest.jpg", link: "everest" },
+      { name: "K2", region: "Pakistan / China", status: "Closed", elevation: "8,611 m", weather: "-40°C Snow", image: "mountain-image/k2.jpg", link: "k2" },
+      { name: "Kangchenjunga", region: "Nepal / India", status: "Closed", elevation: "8,586 m", weather: "-30°C Cloudy", image: "mountain-image/kangchenjunga.jpg", link: "kangchenjunga" },
+      { name: "Lhotse", region: "Nepal / Tibet", status: "Open", elevation: "8,516 m", weather: "-28°C Sunny", image: "mountain-image/lhotse.jpg", link: "lhotse" },
+      { name: "Makalu", region: "Nepal / Tibet", status: "Closed", elevation: "8,485 m", weather: "-31°C Foggy", image: "mountain-image/makalu.jpg", link: "makalu" },
+      { name: "Cho Oyu", region: "Nepal / Tibet", status: "Open", elevation: "8,188 m", weather: "-25°C Clear", image: "mountain-image/cho-oyu.jpg", link: "cho-oyu" },
+      { name: "Dhaulagiri I", region: "Nepal", status: "Open", elevation: "8,167 m", weather: "-23°C Sunny", image: "mountain-image/dhaulagiri.jpg", link: "dhaulagiri" },
+      { name: "Manaslu", region: "Nepal", status: "Closed", elevation: "8,163 m", weather: "-26°C Snow", image: "mountain-image/manaslu.jpg", link: "manaslu" },
+      { name: "Nanga Parbat", region: "Pakistan", status: "Open", elevation: "8,126 m", weather: "-22°C Cloudy", image: "mountain-image/nanga-parbat.jpg", link: "nanga-parbat" },
+      { name: "Annapurna I", region: "Nepal", status: "Closed", elevation: "8,091 m", weather: "-29°C Windy", image: "mountain-image/annapurna.jpg", link: "annapurna" }
+    ];
 
-        <select id="currency">
-          <option>USD</option>
-          <option>IDR</option>
-          <option>EUR</option>
-        </select>
-      </div>
+    let loaded = 0;
+    const batch = 4;
 
-      <div class="menu-row">
-        <button id="lightBtn">Light</button>
-        <button id="darkBtn">Dark</button>
-      </div>
-    </div>
-  </div>
+    function renderMountains() {
+      const container = document.getElementById("mountainContainer");
+      const slice = mountainData.slice(loaded, loaded + batch);
 
-  <script src="script.js"></script>
+      slice.forEach((m) => {
+        const card = document.createElement("div");
+        card.className = "mountain-card";
+        card.onclick = () => window.location.href = `https://montamap.com/${m.link}`;
+        card.innerHTML = `
+          <img src="${m.image}" alt="${m.name}" class="mountain-image" />
+          <div class="gradient-overlay"></div>
+          <div class="mountain-info">
+            <div class="mountain-name">${m.name}</div>
+            <div class="mountain-details">
+              ${m.region}<br />
+              <span class="${m.status === 'Open' ? 'status-open' : 'status-closed'}">Status: ${m.status}</span><br />
+              Elevation: ${m.elevation}<br />
+              Weather: ${m.weather}
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+
+      loaded += batch;
+
+      if (loaded >= mountainData.length) {
+        document.getElementById("loadMoreBtn").style.display = "none";
+      }
+    }
+
+    document.getElementById("loadMoreBtn").addEventListener("click", renderMountains);
+    renderMountains();
+
+    // Theme Toggle Logic
+    const toggleBtn = document.getElementById("themeToggle");
+
+    function applyTheme(isDark) {
+      document.body.classList.toggle("dark", isDark);
+      document.body.style.backgroundImage = isDark
+        ? "var(--bg-dark)"
+        : "var(--bg-light)";
+      toggleBtn.textContent = isDark ? "Switch to Light Mode" : "Switch to Dark Mode";
+    }
+
+    let isDarkMode = false;
+    applyTheme(isDarkMode);
+
+    toggleBtn.addEventListener("click", () => {
+      isDarkMode = !isDarkMode;
+      applyTheme(isDarkMode);
+    });
+  </script>
 </body>
 </html>
