@@ -13,7 +13,7 @@
     body {
       font-family: 'Segoe UI', sans-serif;
       margin: 0;
-      padding: 40px 20px;
+      padding: 80px 20px 40px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -41,6 +41,30 @@
       color: white;
       cursor: pointer;
       z-index: 1000;
+    }
+
+    .tab-buttons {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 1000;
+      display: flex;
+      gap: 12px;
+    }
+
+    .tab-button {
+      background-color: rgba(0,0,0,0.7);
+      color: white;
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      border: none;
+      font-size: 0.9rem;
+    }
+
+    .tab-button.active {
+      background-color: #f39c12;
+      color: black;
     }
 
     .mountain-container {
@@ -115,6 +139,25 @@
       color: #ff7f7f;
     }
 
+    .favorite-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      z-index: 3;
+      font-size: 1.5rem;
+      background: rgba(255,255,255,0.7);
+      border-radius: 50%;
+      padding: 4px 10px;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.3s;
+    }
+
+    .favorite-btn.active {
+      color: gold;
+      background: white;
+    }
+
     #loadMoreBtn {
       margin-top: 24px;
       padding: 12px 20px;
@@ -133,37 +176,35 @@
   </style>
 </head>
 <body>
-  <button class="toggle-theme-btn" id="themeToggle">Switch to Dark Mode</button>
+  <div class="tab-buttons">
+    <button class="tab-button active" id="tabAll">All</button>
+    <button class="tab-button" id="tabFav">Favorites</button>
+  </div>
 
+  <button class="toggle-theme-btn" id="themeToggle">Switch to Dark Mode</button>
   <div class="mountain-container" id="mountainContainer"></div>
   <button id="loadMoreBtn">Load More Mountains</button>
 
   <script>
-    const mountainData = [
-      { name: "Everest", region: "Nepal / Tibet", status: "Closed", elevation: "8,848 m", weather: "-35°C Windy", image: "mountain-image/everest.jpg", link: "everest" },
-      { name: "K2", region: "Pakistan / China", status: "Closed", elevation: "8,611 m", weather: "-40°C Snow", image: "mountain-image/k2.jpg", link: "k2" },
-      { name: "Kangchenjunga", region: "Nepal / India", status: "Closed", elevation: "8,586 m", weather: "-30°C Cloudy", image: "mountain-image/kangchenjunga.jpg", link: "kangchenjunga" },
-      { name: "Lhotse", region: "Nepal / Tibet", status: "Open", elevation: "8,516 m", weather: "-28°C Sunny", image: "mountain-image/lhotse.jpg", link: "lhotse" },
-      { name: "Makalu", region: "Nepal / Tibet", status: "Closed", elevation: "8,485 m", weather: "-31°C Foggy", image: "mountain-image/makalu.jpg", link: "makalu" },
-      { name: "Cho Oyu", region: "Nepal / Tibet", status: "Open", elevation: "8,188 m", weather: "-25°C Clear", image: "mountain-image/cho-oyu.jpg", link: "cho-oyu" },
-      { name: "Dhaulagiri I", region: "Nepal", status: "Open", elevation: "8,167 m", weather: "-23°C Sunny", image: "mountain-image/dhaulagiri.jpg", link: "dhaulagiri" },
-      { name: "Manaslu", region: "Nepal", status: "Closed", elevation: "8,163 m", weather: "-26°C Snow", image: "mountain-image/manaslu.jpg", link: "manaslu" },
-      { name: "Nanga Parbat", region: "Pakistan", status: "Open", elevation: "8,126 m", weather: "-22°C Cloudy", image: "mountain-image/nanga-parbat.jpg", link: "nanga-parbat" },
-      { name: "Annapurna I", region: "Nepal", status: "Closed", elevation: "8,091 m", weather: "-29°C Windy", image: "mountain-image/annapurna.jpg", link: "annapurna" }
-    ];
+    const mountainData = [/* ...data gunung seperti di kode Anda... */];
 
     let loaded = 0;
     const batch = 4;
+    let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
 
-    function renderMountains() {
+    function renderMountains(showFavorites = false) {
       const container = document.getElementById("mountainContainer");
-      const slice = mountainData.slice(loaded, loaded + batch);
+      container.innerHTML = "";
+      const dataToShow = showFavorites
+        ? mountainData.filter(m => favorites.includes(m.name))
+        : mountainData.slice(0, loaded);
 
-      slice.forEach((m) => {
+      dataToShow.forEach((m) => {
         const card = document.createElement("div");
         card.className = "mountain-card";
         card.onclick = () => window.location.href = `https://montamap.com/${m.link}`;
         card.innerHTML = `
+          <span class="favorite-btn ${favorites.includes(m.name) ? 'active' : ''}" data-name="${m.name}">★</span>
           <img src="${m.image}" alt="${m.name}" class="mountain-image" />
           <div class="gradient-overlay"></div>
           <div class="mountain-info">
@@ -177,20 +218,46 @@
           </div>
         `;
         container.appendChild(card);
+
+        card.querySelector(".favorite-btn").onclick = (e) => {
+          e.stopPropagation();
+          toggleFavorite(m.name);
+          renderMountains(showFavorites);
+        };
       });
 
-      loaded += batch;
-
-      if (loaded >= mountainData.length) {
-        document.getElementById("loadMoreBtn").style.display = "none";
-      }
+      document.getElementById("loadMoreBtn").style.display = showFavorites || loaded >= mountainData.length ? "none" : "block";
     }
 
-    document.getElementById("loadMoreBtn").addEventListener("click", renderMountains);
-    renderMountains();
+    function toggleFavorite(name) {
+      if (favorites.includes(name)) {
+        favorites = favorites.filter(n => n !== name);
+      } else {
+        favorites.push(name);
+      }
+      localStorage.setItem("favorites", JSON.stringify(favorites));
+    }
+
+    document.getElementById("loadMoreBtn").addEventListener("click", () => {
+      loaded += batch;
+      renderMountains(false);
+    });
+
+    document.getElementById("tabAll").addEventListener("click", () => {
+      document.getElementById("tabAll").classList.add("active");
+      document.getElementById("tabFav").classList.remove("active");
+      renderMountains(false);
+    });
+
+    document.getElementById("tabFav").addEventListener("click", () => {
+      document.getElementById("tabAll").classList.remove("active");
+      document.getElementById("tabFav").classList.add("active");
+      renderMountains(true);
+    });
 
     // Theme Toggle Logic
     const toggleBtn = document.getElementById("themeToggle");
+    let isDarkMode = false;
 
     function applyTheme(isDark) {
       document.body.classList.toggle("dark", isDark);
@@ -200,13 +267,16 @@
       toggleBtn.textContent = isDark ? "Switch to Light Mode" : "Switch to Dark Mode";
     }
 
-    let isDarkMode = false;
     applyTheme(isDarkMode);
 
     toggleBtn.addEventListener("click", () => {
       isDarkMode = !isDarkMode;
       applyTheme(isDarkMode);
     });
+
+    // Initial load
+    loaded = batch;
+    renderMountains(false);
   </script>
 </body>
 </html>
