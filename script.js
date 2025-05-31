@@ -1,6 +1,6 @@
 // (1) Supabase Setup
-const supabaseUrl = 'https://ademiando.supabase.co';
-const supabaseKey = '1011121314151617181920';
+const supabaseUrl = 'https://bntqvdqkaikkhlmfxovj.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJudHF2ZHFrYWlra2hsbWZ4b3ZqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg2MjU1NTIsImV4cCI6MjA2NDIwMTU1Mn0.jG_Mt1-3861ItE2WzpYKKg7So_WKI506c8F9RTPIl44';
 const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
 // (2) DOM Elements
