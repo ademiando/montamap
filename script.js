@@ -1,7 +1,7 @@
 // (1) Supabase Setup
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 const supabaseUrl = 'https://bntqvdqkaikkhlmfxovj.supabase.co';
-const supabaseKey = 'eyJhbGciOi...'; // Potong di sini untuk keamanan publik
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJudHF2ZHFrYWlra2hsbWZ4b3ZqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg2MjU1NTIsImV4cCI6MjA2NDIwMTU1Mn0.jG_Mt1-3861ItE2WzpYKKg7So_WKI506c8F9RTPIl44';
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 // (2) DOM Elements
