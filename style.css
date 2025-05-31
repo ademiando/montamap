@@ -21,12 +21,15 @@ header {
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
-  background-color: #2c2c2c;
   color: #e3ddcd;
   position: sticky;
   top: 0;
   z-index: 9999 !important;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.4);
+
 }
 
 
